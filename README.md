@@ -48,7 +48,8 @@
 
 3. Search for Security Reader Role and select it and click on Next.
  
-   ![image](https://github.com/user-attachments/assets/c8ac8d6e-ff51-49c3-a8e4-c8d1d11826e7)
+   ![image](https://github.com/user-attachments/assets/1b213880-a09f-4122-af58-6ea2b0dc45f9)
+
 
 
 4. Now click on select members and search for your application and click on select button and then click on Review and Create.
