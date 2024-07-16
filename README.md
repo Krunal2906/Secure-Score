@@ -57,8 +57,7 @@
 
 
 
-## Step-3 : Create an Item in Zabbix for secure score
-
+## Step-3 : Create python script to get secure score with help of REST API.
 
 ### Azure Secure Score Retrieval Script
 
@@ -80,9 +79,13 @@ To use this script, you need to provide your Azure tenant ID, client ID, client 
 3. `client_secret` - Your Azure client secret
 4. `subscription_id` - Your Azure subscription ID
 
-### Scipt
+### Run command 
+``` ./secure_score.py {Your_Tenant_ID} {YOur_client_ID} {Your_Secret_Value} {Your_Subscription_ID}
+ ```
+### Script 
 
 ```python
+#!/usr/bin/env python3
 import sys
 import requests
 
@@ -138,9 +141,46 @@ else:
     print("Failed to extract percentage value from the response.")
     sys.exit(1)
  ```
-   
 
-  
+* Now from here there are 2 options
+    1. You can send the data where you want with API.
+    2. TBD: Send data to zabbix.
+
+## Step-4: Send script's data to Zabbix with the help of Item.
+
+1. Go to your instance's CLI where zabbix is installed and give this command  ``` cd /usr/lib/zabbix/externalscripts ``` and there create script name secure_score.py with 
+   the given command ``` nano secure_score.py ``` and then paste the script inside it. 
+2. Next give permission to script for execute with given command ``` chmod +x secure_score.py ```
+3. Now go to zabbix UI and Configuration > Templates > select your template > Item > Create Item. and give the appropriate values as in the screenshot.
+
+   - Name: secure score
+   - Type: External checks 
+   - key: ``` secure_score.py[{$TENET.ID} ,{$CLIENT.ID} ,{$SECRET.VALUE}, {$SUB.ID}] ```
+   - Type of Information: Numeric(float)
+   - Update Interval: 1d
+
+   * Other parameters as it is and click Add  
+ 
+   ![image](https://github.com/user-attachments/assets/05b79343-5530-4054-b96d-eadc3a1d8675)
+
+
+5. Now add macros inside your template as shown below and click update 
+
+   ![image](https://github.com/user-attachments/assets/d5126a7e-fa5e-48df-901d-888a7f9656ff)
+
+
+## Step-5: Add secure score to Grafana 
+
+1. Add data source for zabbix inside grafana and go to dashboard and then add panel nd give below values.
+
+   - Query type: Metrics
+   - Group: /.*/
+   - Host: Your_host_name
+   - Item: Your_item_name
+     
+   ![image](https://github.com/user-attachments/assets/93192e97-69e0-4872-8ca7-6f3d94e6196f)
+
+ 
   
    
    
